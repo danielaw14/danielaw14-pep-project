@@ -2,6 +2,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import Controller.SocialMediaController;
 import Model.Account;
+import Model.Message;
 import Util.ConnectionUtil;
 import io.javalin.Javalin;
 
@@ -25,17 +26,21 @@ public class Main {
         app.start(8080);
         Thread.sleep(1000);
 
-         HttpRequest postRequest = HttpRequest.newBuilder()
-                .uri(URI.create("http://localhost:8080/register"))
-                .POST(HttpRequest.BodyPublishers.ofString("{" +
-                        "\"username\": \"\", " +
-                        "\"password\": \"password\" }"))
+        HttpRequest postMessageRequest = HttpRequest.newBuilder()
+                .uri(URI.create("http://localhost:8080/messages"))
+                .POST(HttpRequest.BodyPublishers.ofString("{"+
+                        "\"posted_by\":1, " +
+                        "\"message_text\": \"hello message\", " +
+                        "\"time_posted_epoch\": 1669947792}"))
                 .header("Content-Type", "application/json")
                 .build();
-        HttpResponse response = webClient.send(postRequest, HttpResponse.BodyHandlers.ofString());
+        HttpResponse response = webClient.send(postMessageRequest, HttpResponse.BodyHandlers.ofString());
         int status = response.statusCode();
-        Account expectedAccount = new Account(1, "testuser1", "password");
-        Account actualAccount = objectMapper.readValue(response.body().toString(), Account.class);
-        System.out.print(status + "\n" + expectedAccount + "\n" + actualAccount + "\n");
+
+        ObjectMapper om = new ObjectMapper();
+        Message expectedResult = new Message(2, 1, "hello message", 1669947792);
+        System.out.println(response.body().toString());
+        Message actualResult = om.readValue(response.body().toString(), Message.class);
+        System.out.print(status + "\n" + expectedResult + "\n" + actualResult + "\n");
     }
 }

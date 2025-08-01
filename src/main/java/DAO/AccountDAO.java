@@ -79,7 +79,7 @@ public class AccountDAO {
     {
         Connection connection = ConnectionUtil.getConnection();
         try{
-            String sql  = "SELECT * FROM account WHERE acount_id = ?";
+            String sql  = "SELECT * FROM account WHERE account_id = ?";
 
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
 
