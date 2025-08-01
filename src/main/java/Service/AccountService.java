@@ -17,7 +17,7 @@ public class AccountService {
 
     public Account register(Account account)
     {
-        if ((account.username != null) && (account.password.length() >= 4) 
+        if ((account.username != null) && (account.username != "") && (account.password.length() >= 4) 
             && (accountDAO.getUserByUsername(account.getUsername()) == null))
         {
             return accountDAO.register(account.getUsername(), account.getPassword());
