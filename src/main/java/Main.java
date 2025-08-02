@@ -29,8 +29,9 @@ public class Main {
         app.start(8080);
         Thread.sleep(1000);
 
-        HttpRequest request = HttpRequest.newBuilder()
+       HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create("http://localhost:8080/messages/1"))
+                .DELETE()
                 .build();
         HttpResponse response = webClient.send(request, HttpResponse.BodyHandlers.ofString());
         int status = response.statusCode();
