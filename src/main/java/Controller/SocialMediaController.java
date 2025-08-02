@@ -84,24 +84,15 @@ public class SocialMediaController {
     }
 
     private void getMessagesByIDHandler(Context context) throws JsonProcessingException{
-        ObjectMapper mapper = new ObjectMapper();
-        Message message = mapper.readValue(context.body(), Message.class);
-        if (message != null)
-            context.json(messageService.getMessageByMessageID(message));
+        context.json(messageService.getMessageByMessageID(Integer.parseInt(context.pathParam("message_id"))));
     }
 
     private void deleteMessagesByIDHandler(Context context) throws JsonProcessingException{
-        ObjectMapper mapper = new ObjectMapper();
-        Message message = mapper.readValue(context.body(), Message.class);
-        if (message != null)
-            context.json(messageService.DeleteMessagesByID(message));
+        context.json(messageService.DeleteMessagesByID(Integer.parseInt(context.pathParam("message_id"))));
     }
 
     private void patchMessagesByIDHandler(Context context) throws JsonProcessingException{
-        ObjectMapper mapper = new ObjectMapper();
-        Message message = mapper.readValue(context.body(), Message.class);
-        if (message != null)
-            context.json(messageService.UpdateMessagesByID(Integer.parseInt(context.pathParam("message_id")), context.pathParam("message_text")));
+        context.json(messageService.UpdateMessagesByID(Integer.parseInt(context.pathParam("message_id")), context.pathParam("message_text")));
     }
 
     private void getUserMessagesHandler(Context context) throws JsonProcessingException{

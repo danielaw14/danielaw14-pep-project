@@ -30,13 +30,12 @@ public class Main {
         Thread.sleep(1000);
 
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create("http://localhost:8080/accounts/1/messages"))
+                .uri(URI.create("http://localhost:8080/messages/1"))
                 .build();
         HttpResponse response = webClient.send(request, HttpResponse.BodyHandlers.ofString());
         int status = response.statusCode();
-        List<Message> expectedResult = new ArrayList<>();
-        expectedResult.add(new Message(1, 1, "test message 1", 1669947792));
-        List<Message> actualResult = objectMapper.readValue(response.body().toString(), new TypeReference<List<Message>>(){});
+        Message expectedResult = new Message(1, 1, "test message 1", 1669947792);
+        Message actualResult = objectMapper.readValue(response.body().toString(), Message.class);
         System.out.print(status + "\n" + expectedResult + "\n" + actualResult + "\n");
     }
 }

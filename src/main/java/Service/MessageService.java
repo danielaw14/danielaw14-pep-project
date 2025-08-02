@@ -38,14 +38,14 @@ public class MessageService {
         return messages;
     }
 
-    public Message getMessageByMessageID(Message message)
+    public Message getMessageByMessageID(int message_id)
     {
-        Message messages = messageDAO.getMessageByMessageID(message.getMessage_id());
+        Message messages = messageDAO.getMessageByMessageID(message_id);
         return messages;
     }
 
-    public Message DeleteMessagesByID(Message message){
-        Message messages = messageDAO.DeleteMessagesByID(message);
+    public Message DeleteMessagesByID(int message_id){
+        Message messages = messageDAO.DeleteMessagesByID(message_id);
         return messages;
     }
 

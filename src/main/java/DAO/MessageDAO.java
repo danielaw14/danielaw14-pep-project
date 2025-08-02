@@ -63,7 +63,7 @@ public class MessageDAO {
     public Message getMessageByMessageID(int message_id)
     {
         Connection connection = ConnectionUtil.getConnection();
-        Message message;
+        Message message = new Message();
         try{
             String sql  = "SELECT * FROM message WHERE message_id = ?";
 
@@ -74,7 +74,7 @@ public class MessageDAO {
             ResultSet rs = preparedStatement.executeQuery();
 
             while (rs.next()){
-                message = new Message(rs.getInt("posted_by"), rs.getString("message_text"), 
+                message = new Message(rs.getInt("message_id"), rs.getInt("posted_by"), rs.getString("message_text"), 
                         rs.getLong("time_posted_epoch"));
                 return message;
             }
@@ -82,10 +82,10 @@ public class MessageDAO {
         catch(SQLException e){
             System.out.println(e.getMessage());
         }
-        return new Message();
+        return message;
     }
 
-    public Message DeleteMessagesByID(Message message)
+    public Message DeleteMessagesByID(int message_id)
     {
         Connection connection = ConnectionUtil.getConnection();
         try {
@@ -93,7 +93,7 @@ public class MessageDAO {
 
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
 
-            preparedStatement.setInt(1, message.getMessage_id());
+            preparedStatement.setInt(1, message_id);
 
             preparedStatement.executeUpdate();
 
