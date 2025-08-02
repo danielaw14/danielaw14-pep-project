@@ -29,14 +29,18 @@ public class Main {
         app.start(8080);
         Thread.sleep(1000);
 
-       HttpRequest request = HttpRequest.newBuilder()
+       HttpRequest postMessageRequest = HttpRequest.newBuilder()
                 .uri(URI.create("http://localhost:8080/messages/1"))
-                .DELETE()
+                .method("PATCH", HttpRequest.BodyPublishers.ofString("{"+
+                        "\"message_text\": \"updated message\" }"))
+                .header("Content-Type", "application/json")
                 .build();
-        HttpResponse response = webClient.send(request, HttpResponse.BodyHandlers.ofString());
+        HttpResponse response = webClient.send(postMessageRequest, HttpResponse.BodyHandlers.ofString());
         int status = response.statusCode();
-        Message expectedResult = new Message(1, 1, "test message 1", 1669947792);
-        Message actualResult = objectMapper.readValue(response.body().toString(), Message.class);
+        ObjectMapper om = new ObjectMapper();
+        Message expectedResult = new Message(1, 1, "updated message", 1669947792);
+
+        Message actualResult = om.readValue(response.body().toString(), Message.class);
         System.out.print(status + "\n" + expectedResult + "\n" + actualResult + "\n");
     }
 }
