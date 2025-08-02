@@ -82,7 +82,7 @@ public class MessageDAO {
         catch(SQLException e){
             System.out.println(e.getMessage());
         }
-        return message;
+        return null;
     }
 
     public Message DeleteMessagesByID(int message_id)
@@ -105,14 +105,14 @@ public class MessageDAO {
             }
             else
             {
-                return new Message();
+                return null;
             }
 
         }
         catch(SQLException e){
             System.out.println(e.getMessage());
         }
-        return new Message();
+        return null;
     }
 
     public Message UpdateMessagesByID(int message_id, String message_text)
