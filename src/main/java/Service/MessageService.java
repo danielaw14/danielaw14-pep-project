@@ -21,7 +21,7 @@ public class MessageService {
 
     public Message postMessage(Message message)
     {
-        if (message.getMessage_text() != null && message.getMessage_text().length() <= 255 
+        if (message.getMessage_text() != null && message.getMessage_text() != "" && message.getMessage_text().length() <= 255 
             && accountDAO.getUserByAccountID(message.posted_by) != null)
         {
             return messageDAO.postMessage(message);
@@ -40,17 +40,19 @@ public class MessageService {
 
     public Message getMessageByMessageID(Message message)
     {
-        return messageDAO.getMessageByMessageID(message.getMessage_id());
+        Message messages = messageDAO.getMessageByMessageID(message.getMessage_id());
+        return messages;
     }
 
     public Message DeleteMessagesByID(Message message){
-        return messageDAO.DeleteMessagesByID(message);
+        Message messages = messageDAO.DeleteMessagesByID(message);
+        return messages;
     }
 
-    public Message UpdateMessagesByID(Message message){
-        if (message.getMessage_text() != null && message.getMessage_text().length() <= 255 
-            && messageDAO.getMessageByMessageID(message.getMessage_id()) != null){
-                return messageDAO.UpdateMessagesByID(message);
+    public Message UpdateMessagesByID(int message_id, String message_text){
+        if (message_text != null && message_text.length() <= 255 
+            && messageDAO.getMessageByMessageID(message_id) != null){
+                return messageDAO.UpdateMessagesByID(message_id, message_text);
         }
         else
         {
@@ -58,8 +60,9 @@ public class MessageService {
         }
     }
 
-    public List<Message> getAllMessagesByUser(Message message)
+    public List<Message> getAllMessagesByUser(int posted_by)
     {
-        return messageDAO.getAllMessagesByUser(message.getPosted_by());
+        List<Message> messages = messageDAO.getAllMessagesByUser(posted_by);
+        return messages;
     }
 }

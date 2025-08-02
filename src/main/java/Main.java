@@ -1,3 +1,4 @@
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import Controller.SocialMediaController;
@@ -11,6 +12,8 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+
+import java.util.*;
 
 /**
  * This class is provided with a main method to allow you to manually run and test your application. This class will not
@@ -26,21 +29,14 @@ public class Main {
         app.start(8080);
         Thread.sleep(1000);
 
-        HttpRequest postMessageRequest = HttpRequest.newBuilder()
-                .uri(URI.create("http://localhost:8080/messages"))
-                .POST(HttpRequest.BodyPublishers.ofString("{"+
-                        "\"posted_by\":1, " +
-                        "\"message_text\": \"hello message\", " +
-                        "\"time_posted_epoch\": 1669947792}"))
-                .header("Content-Type", "application/json")
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create("http://localhost:8080/accounts/1/messages"))
                 .build();
-        HttpResponse response = webClient.send(postMessageRequest, HttpResponse.BodyHandlers.ofString());
+        HttpResponse response = webClient.send(request, HttpResponse.BodyHandlers.ofString());
         int status = response.statusCode();
-
-        ObjectMapper om = new ObjectMapper();
-        Message expectedResult = new Message(2, 1, "hello message", 1669947792);
-        System.out.println(response.body().toString());
-        Message actualResult = om.readValue(response.body().toString(), Message.class);
+        List<Message> expectedResult = new ArrayList<>();
+        expectedResult.add(new Message(1, 1, "test message 1", 1669947792));
+        List<Message> actualResult = objectMapper.readValue(response.body().toString(), new TypeReference<List<Message>>(){});
         System.out.print(status + "\n" + expectedResult + "\n" + actualResult + "\n");
     }
 }

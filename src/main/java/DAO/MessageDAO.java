@@ -111,7 +111,7 @@ public class MessageDAO {
         return new Message();
     }
 
-    public Message UpdateMessagesByID(Message message)
+    public Message UpdateMessagesByID(int message_id, String message_text)
     {
         Connection connection = ConnectionUtil.getConnection();
         try {
@@ -119,8 +119,8 @@ public class MessageDAO {
 
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
 
-            preparedStatement.setString(1, message.getMessage_text());
-            preparedStatement.setInt(2, message.getMessage_id());
+            preparedStatement.setString(1, message_text);
+            preparedStatement.setInt(2, message_id);
 
             preparedStatement.executeUpdate();
 
@@ -143,7 +143,7 @@ public class MessageDAO {
         Connection connection = ConnectionUtil.getConnection();
         List<Message> messages = new ArrayList<Message>();
         try{
-            String sql  = "SELECT * FROM message WHERE posted_by = ?";
+            String sql  = "SELECT * FROM message WHERE posted_by = ?;";
 
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
 

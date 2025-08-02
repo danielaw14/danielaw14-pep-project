@@ -1,7 +1,6 @@
 package Controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.javalin.Javalin;
@@ -11,11 +10,7 @@ import Model.Message;
 import Service.AccountService;
 import Service.MessageService;
 
-/**
- * TODO: You will need to write your own endpoints and handlers for your controller. The endpoints you will need can be
- * found in readme.md as well as the test cases. You should
- * refer to prior mini-project labs and lecture materials for guidance on how a controller may be built.
- */
+
 public class SocialMediaController {
     AccountService accountService;
     MessageService messageService;
@@ -38,7 +33,7 @@ public class SocialMediaController {
         app.get("/messages/{message_id}", this::getMessagesByIDHandler);
         app.delete("/messages/{message_id}", this::deleteMessagesByIDHandler);
         app.patch("/messages/{message_id}", this::patchMessagesByIDHandler);
-        app.get("/account/{account_id}/messages", this::getUserMessagesHandler);
+        app.get("/accounts/{account_id}/messages", this::getUserMessagesHandler);
         
         return app;
     }
@@ -88,28 +83,29 @@ public class SocialMediaController {
         context.json(messageService.getAllMessages());
     }
 
-    private void getMessagesByIDHandler(Context context) throws JsonMappingException, JsonProcessingException{
+    private void getMessagesByIDHandler(Context context) throws JsonProcessingException{
         ObjectMapper mapper = new ObjectMapper();
         Message message = mapper.readValue(context.body(), Message.class);
-        context.json(messageService.getMessageByMessageID(message));
+        if (message != null)
+            context.json(messageService.getMessageByMessageID(message));
     }
 
-    private void deleteMessagesByIDHandler(Context context) throws JsonMappingException, JsonProcessingException{
+    private void deleteMessagesByIDHandler(Context context) throws JsonProcessingException{
         ObjectMapper mapper = new ObjectMapper();
         Message message = mapper.readValue(context.body(), Message.class);
-        context.json(messageService.DeleteMessagesByID(message));
+        if (message != null)
+            context.json(messageService.DeleteMessagesByID(message));
     }
 
-    private void patchMessagesByIDHandler(Context context) throws JsonMappingException, JsonProcessingException{
+    private void patchMessagesByIDHandler(Context context) throws JsonProcessingException{
         ObjectMapper mapper = new ObjectMapper();
         Message message = mapper.readValue(context.body(), Message.class);
-        context.json(messageService.UpdateMessagesByID(message));
+        if (message != null)
+            context.json(messageService.UpdateMessagesByID(Integer.parseInt(context.pathParam("message_id")), context.pathParam("message_text")));
     }
 
-    private void getUserMessagesHandler(Context context) throws JsonMappingException, JsonProcessingException{
-        ObjectMapper mapper = new ObjectMapper();
-        Message message = mapper.readValue(context.body(), Message.class);
-        context.json(messageService.getAllMessagesByUser(message));
+    private void getUserMessagesHandler(Context context) throws JsonProcessingException{
+        context.json(messageService.getAllMessagesByUser(Integer.parseInt(context.pathParam("account_id"))));
     }
 
 }
