@@ -50,7 +50,7 @@ public class MessageService {
     }
 
     public Message UpdateMessagesByID(int message_id, String message_text){
-        if (message_text != null && message_text.length() <= 255 
+        if (message_text != null && message_text != "" &&  message_text.length() <= 255 
             && messageDAO.getMessageByMessageID(message_id) != null){
                 return messageDAO.UpdateMessagesByID(message_id, message_text);
         }
